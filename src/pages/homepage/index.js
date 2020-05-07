@@ -20,7 +20,6 @@ export default () => {
     dom: fragment,
     effect: () => {
       function renderH1(state) {
-        console.log("执行订阅");
         h1.innerText = state.times;
       }
       const unsubscribe = subscribe(renderH1);

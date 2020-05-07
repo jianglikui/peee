@@ -5,15 +5,25 @@ let clearEffect = () => {};
 let renderDom;
 function handleHistoryChange(location) {
   clearEffect();
+
   document.body.innerHTML = "";
+
+  const renderComponent = (promise) => {
+    promise.then((module) => {
+      const component = module.default();
+      renderDom = component.dom;
+      root.appendChild(component.dom);
+      component.effect = component.effect || (() => {});
+      clearEffect = component.effect() || (() => {});
+    });
+  };
+
   switch (location.pathname) {
     case "/":
-      import("./pages/homepage").then((module) => {
-        const component = module.default();
-        renderDom = component.dom;
-        root.appendChild(component.dom);
-        clearEffect = component.effect();
-      });
+      renderComponent(import("./pages/homepage"));
+      break;
+    case "/404":
+      renderComponent(import("./pages/404"));
       break;
   }
 }

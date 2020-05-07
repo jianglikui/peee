@@ -1,22 +1,21 @@
-import history from "../../routes";
+import history from "../../history";
 
 export default () => {
-  const notFoundEl = document.createElement("H1");
-  notFoundEl.innerText = "404 Not Found!";
-  const backButtonEl = document.createElement("BUTTON");
-  backButtonEl.innerText = "返回首页";
-  backButtonEl.addEventListener("click", function () {
+  const h1 = document.createElement("H1");
+  h1.innerText = "404 not found";
+  const fragment = document.createDocumentFragment();
+  fragment.append(h1);
+
+  const notFoundLink = document.createElement("A");
+  notFoundLink.innerText = "首页";
+  notFoundLink.href = "/";
+  notFoundLink.onclick = (e) => {
+    e.preventDefault();
     history.push("/");
-  });
-  document.body.appendChild(notFoundEl);
-  document.body.appendChild(backButtonEl);
-  return () => {
-    console.log("close 404");
-    document.body.removeChild(notFoundEl);
-    document.body.removeChild(backButtonEl);
+  };
+  fragment.append(notFoundLink);
+
+  return {
+    dom: fragment,
   };
 };
-
-export function useHistory() {
-  return history;
-}

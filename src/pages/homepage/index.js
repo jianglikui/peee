@@ -10,14 +10,16 @@ export default () => {
       {
         el: "h2",
         ref: "h2",
-        html: "404",
-        events: {
-          click() {
-            history.push("/404");
-          },
-        },
         children: [
-          { el: "button", html: "button1" },
+          {
+            el: "button",
+            html: "404",
+            events: {
+              click() {
+                history.push("/404");
+              },
+            },
+          },
           { el: "button", html: "button2" },
         ],
       },
@@ -27,10 +29,9 @@ export default () => {
   return {
     dom: root,
     effect: () => {
-      function renderH1(state) {
-        h1.innerText = state.times;
-      }
-      const unsubscribe = subscribe(renderH1);
+      const unsubscribe = subscribe(function (state) {
+        h1.innerText = state.times * state.times;
+      });
 
       var siv = setInterval(() => {
         dispatch({ type: ADD });

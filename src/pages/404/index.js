@@ -1,21 +1,23 @@
 import history from "../../history";
+import { createDom } from "../../utils";
 
 export default () => {
-  const h1 = document.createElement("H1");
-  h1.innerText = "404 not found";
-  const fragment = document.createDocumentFragment();
-  fragment.append(h1);
-
-  const notFoundLink = document.createElement("A");
-  notFoundLink.innerText = "首页";
-  notFoundLink.href = "/";
-  notFoundLink.onclick = (e) => {
-    e.preventDefault();
-    history.push("/");
-  };
-  fragment.append(notFoundLink);
-
+  const dom = createDom({
+    el: "div",
+    children: [
+      { el: "h1", html: "404" },
+      {
+        el: "button",
+        html: "首页",
+        events: {
+          click() {
+            history.push("/");
+          },
+        },
+      },
+    ],
+  }).root;
   return {
-    dom: fragment,
+    dom,
   };
 };

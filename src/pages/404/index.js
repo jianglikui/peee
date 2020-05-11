@@ -2,22 +2,19 @@ import history from "../../history";
 import { createDom } from "../../utils";
 
 export default () => {
-  const dom = createDom({
-    el: "div",
-    children: [
-      { el: "h1", html: "404" },
+  const { root, homepageButton } = createDom({
+    node: "div",
+    html: [
+      { node: "h1", html: "404" },
       {
-        el: "button",
+        node: "button",
         html: "首页",
-        events: {
-          click() {
-            history.push("/");
-          },
-        },
+        ref: "homepageButton",
       },
     ],
-  }).root;
+  });
+  homepageButton.onclick = () => history.push("/");
   return {
-    dom,
+    root,
   };
 };

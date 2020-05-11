@@ -1,31 +1,24 @@
 export const createDom = (options) => {
   const doms = {};
   const findDom = (tree, container) => {
-    const excludeAttrNames = ["html", "children", "ref", "el", "events"];
+    const excludeAttrNames = ["html", "ref", "node"];
     const filterAttr = (attrName) => !excludeAttrNames.includes(attrName);
     const attrNames = Object.keys(tree).filter(filterAttr);
 
     //创建元素
-    const target = document.createElement(tree.el);
-    //html
-    typeof tree.html !== "undefined" && (target.innerHTML = tree.html);
+    const target = document.createElement(tree.node);
     //attr
     const setAttr = (attr) => target.setAttribute(attr, tree[attr]);
     attrNames.forEach(setAttr);
-    //events
-    if (tree.events) {
-      for (const eventName in tree.events) {
-        target.addEventListener(eventName, tree.events[eventName]);
-      }
-    }
     //ref
     if (tree.ref) doms[tree.ref] = target;
 
-    if (Array.isArray(tree.children)) {
+    if (Array.isArray(tree.html)) {
       const findChild = (child) => findDom(child, target);
-      tree.children.forEach(findChild);
+      tree.html.forEach(findChild);
+    } else if (["string", "number"].includes(typeof tree.html)) {
+      target.innerHTML = tree.html;
     }
-
     //返回root，追加child
     if (typeof container === "undefined") return target;
     container.appendChild(target);

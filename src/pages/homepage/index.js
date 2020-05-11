@@ -3,34 +3,30 @@ import history from "../../history";
 import { createDom } from "../../utils";
 
 export default () => {
-  const { root, h1 } = createDom({
-    el: "div",
-    children: [
-      { el: "h1", html: "我是标题1", ref: "h1" },
+  const elements = createDom({
+    node: "div",
+    html: [
+      { node: "h1", html: "我是标题1", ref: "h1" },
       {
-        el: "h2",
+        node: "h2",
         ref: "h2",
-        children: [
-          {
-            el: "button",
-            html: "404",
-            events: {
-              click() {
-                history.push("/404");
-              },
-            },
-          },
-          { el: "button", html: "button2" },
+        html: [
+          { node: "button", html: "404", ref: "notFountButton" },
+          { node: "button", html: "button2" },
         ],
       },
     ],
   });
 
+  const { root, h1, notFountButton } = elements;
+
+  notFountButton.onclick = () => history.push("/404");
+
   return {
-    dom: root,
+    root,
     effect: () => {
       const unsubscribe = subscribe(function (state) {
-        h1.innerText = state.times * state.times;
+        h1.innerText = state.times;
       });
 
       var siv = setInterval(() => {

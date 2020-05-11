@@ -7,13 +7,13 @@ let renderDom;
 function handleHistoryChange(location) {
   clearEffect();
 
-  root.innerHTML = "";
+  if (renderDom) root.removeChild(renderDom);
 
   const renderComponent = (promise) => {
     promise.then((module) => {
       const component = module.default();
-      renderDom = component.dom;
-      root.appendChild(component.dom);
+      renderDom = component.root;
+      root.appendChild(component.root);
       component.effect = component.effect || (() => {});
       clearEffect = component.effect() || (() => {});
     });
